@@ -1,7 +1,14 @@
 name: ComexGPT Bot
 
 on:
+  # Dispara manualmente com input "pergunta"
   workflow_dispatch:
+    inputs:
+      pergunta:
+        description: 'Qual a pergunta que deseja enviar ao ComexGPT?'
+        required: true
+
+  # Dispara automaticamente a cada 2 horas
   schedule:
     - cron: '0 */2 * * *'
 
@@ -10,33 +17,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - name: Instalar dependências
         run: pip install -r requirements.txt
-      - name: Executar bot
-        run: python post_to_teams.py
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
-          CHAT_PROMPT: "Qual o status da última DI?"
 
-name: ComexGPT Bot
-
-on:
-  workflow_dispatch:
-    inputs:
-      pergunta:
-        description: 'Qual a pergunta que deseja enviar ao ComexGPT?'
-        required: true
-  schedule:
-    - cron: '0 */2 * * *'  # a cada 2 horas
-
-jobs:
-  run-bot:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Instalar dependências
-        run: pip install -r requirements.txt
       - name: Executar bot
         run: python post_to_teams.py
         env:
